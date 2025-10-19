@@ -1,0 +1,118 @@
+.input-wrapper {
+  position: relative;
+  width: 800px;
+  max-width: 90vw;
+  border-radius: 20px;
+  padding: 15px;
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #ffffff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  z-index: 0;
+}
+
+.input-wrapper:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(51, 132, 255, 0.4);
+}
+
+/* Animated gradient border */
+.input-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(90deg, #2b9bc7, #3b82f6, #637aac, #769bb9, #2b9bc7);
+  background-size: 400% 100%;
+  animation: line-move 10s linear infinite;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes line-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 400% 50%;
+  }
+}
+
+/* Make inputs & datepicker clickable above border layer */
+.input-wrapper input,
+.react-datepicker-wrapper,
+.btn {
+  position: relative;
+  z-index: 2;
+  padding: 8px;
+}
+
+/* Input styling */
+.input-wrapper input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1.1em;
+  color: #1e3a8a; /* dark blue text */
+}
+
+/* DatePicker */
+.react-datepicker-wrapper {
+  width: 180px;
+}
+
+.react-datepicker__input-container input {
+  background: transparent;
+  border: none;
+  color: #1e3a8a;
+  width: 200px;
+  text-align: center;
+  font-size: 0.9em;
+  outline: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: border 0.3s ease;
+}
+
+.react-datepicker__input-container input:hover {
+  border: 2px solid #3b82f6;
+}
+
+/* Button styling */
+.btn {
+  background-color: #2563eb;
+  color: white;
+  border-radius: 10px;
+  padding: 8px 15px;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  cursor: pointer;
+  background-color: #1d4ed8;
+  transform: scale(1.05);
+}
+
+/* DatePicker popup above everything */
+/* .react-datepicker-popper {
+  z-index: 9999 !important;
+} */
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
