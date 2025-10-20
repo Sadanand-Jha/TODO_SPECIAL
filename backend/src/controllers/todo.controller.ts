@@ -32,9 +32,9 @@ const getAllTodo = asyncHandler(async (req: Request ,res: Response) => {
 
 const deleteTodo = asyncHandler(async(req: Request, res: Response) => {
     console.log("this is from todo controller ", req.body)
-    const {owner, todo} = req.body
+    const {deadline, todo} = req.body
     
-    const delete_todo = await Todo.findOneAndDelete({owner, todo})
+    const delete_todo = await Todo.findOneAndDelete({deadline, todo})
     if(!delete_todo){
         return res.status(400)
         .json(new ApiError(400, "todo not found!"))

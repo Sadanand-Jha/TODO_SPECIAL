@@ -5,56 +5,38 @@ import { useEffect, useState } from "react"
 import './mycss.css'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import api from "../../../functions/axios"
+import api from "../../../functions/api"
+import { useTodo } from "@/context/TodoContext"
 
 export default function InputWithButton() {
   const [content, setContent] = useState("")
   const [deadline, setDeadline] = useState<Date | null>(null)
-  const [suggestions, setSuggestions] = useState<string[]>([])
-  const [loadingSuggestions, setLoadingSuggestions] = useState(false)
 
   const url = `http://localhost:4000`
 
-  // 🧠 Debounce typing
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      if (content.trim().length > 2) {
-        fetchSuggestions(content)
-      } else {
-        setSuggestions([])
-      }
-    }, 600)
-    return () => clearTimeout(delay)
-  }, [content])
+  
 
-  const fetchSuggestions = async (text: string) => {
-    setLoadingSuggestions(true)
-    try {
-      const res = await api.post(`${url}/api/v1/openai/suggest`, { text })
-      setSuggestions(res.data.suggestions)
-    } catch (err) {
-      console.error("AI suggest error:", err)
-    } finally {
-      setLoadingSuggestions(false)
-    }
-  }
+  // context api
+
+    const {setTodos} = useTodo()
+
 
   const addTodo = async (): Promise<void> => {
     if (!content.trim()) return alert("Please enter a todo meow 😺")
 
     const data = {
       content,
-      deadline: deadline ? deadline.toISOString() : null
+      deadline: deadline 
     }
 
     try {
       const response = await api.post(`${url}/api/v1/todo/addtodo`, data, {
         withCredentials: true
       })
-      console.log("Response:", response.data)
-      setContent("")
-      setDeadline(null)
-      setSuggestions([])
+      console.log('this is response from add todo', response)
+      console.log("Response:", response.data.data.todo)
+      setTodos((prev) => [...(prev || []), {todo: data.content, deadline: data.deadline}])
+      setContent("")  
     } catch (error) {
       console.error("Error adding todo:", error)
     }
@@ -70,25 +52,7 @@ export default function InputWithButton() {
         onChange={(e) => setContent(e.target.value)}
       />
 
-      {loadingSuggestions && <p className="text-sm text-gray-400">Thinking...</p>}
-
-      {suggestions.length > 0 && (
-        <div className="absolute bg-white border border-gray-200 mt-1 w-full rounded-md shadow-lg z-10">
-          {suggestions.map((s, i) => (
-            <div
-              key={i}
-              className="p-2 hover:bg-blue-100 cursor-pointer"
-              onClick={() => {
-                setContent(s)
-                setSuggestions([])
-              }}
-            >
-              {s}
-            </div>
-          ))}
-        </div>
-      )}
-
+      
       <DatePicker
         selected={deadline}
         onChange={(date: Date | null) => setDeadline(date)}

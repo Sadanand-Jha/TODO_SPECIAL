@@ -1,8 +1,12 @@
 'use client'
 import React, { useContext, createContext, useState } from "react";
-import Error from "next/error";
+
+export interface todoType{
+  deadline: Date,
+  todo: string
+}
 interface todoContextType{
-    todos: Array<object> | undefined,
+    todos: Array<todoType> | undefined,
     setTodos: React.Dispatch<React.SetStateAction<Array<object> | undefined>>
 }
 const TodoContext = createContext<todoContextType | undefined>(undefined)
@@ -10,7 +14,7 @@ const TodoContext = createContext<todoContextType | undefined>(undefined)
 export const useTodo = () => {
   const context = useContext(TodoContext);
   if (context === undefined) {
-    throw new Error({statusCode: 400, title: "todoContext is undefined!"});
+    throw new Error( "todoContext is undefined!");
   }
   return context;
 };

@@ -2,13 +2,20 @@
 import React, { useState, useEffect } from 'react'
 import Content from './Content'
 import { useRouter } from 'next/navigation';
-import api from '../../../functions/axios';
+import api from '../../../functions/api';
 import Navbar from '../navbar/navbar_welcome';
+import { useAuth } from '@/context/AuthContext';
 
 
 function Page() {
   const [user, setUser] = useState<any>(null);
   const router = useRouter()
+
+
+  // CONTEXT
+  const { AuthUser, setAuthUser } = useAuth()
+
+
 
 
   const logout = async () => {
@@ -33,7 +40,12 @@ function Page() {
       }
     };
 
-    fetchProfile();
+    if (!AuthUser) {
+      fetchProfile();
+    }
+    else{
+      setUser(AuthUser)
+    }
   }, []);
 
   if (!user) return (
@@ -52,7 +64,7 @@ function Page() {
         <button className="bg-red-700 text-white rounded-xl p-2 cursor-pointer" onClick={logout}>Logout!</button>
       </div> */}
       <div>
-        <Navbar navbar_word={user.username}/>
+        <Navbar navbar_word={user.username} />
       </div>
       <Content />
     </div>

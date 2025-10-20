@@ -1,9 +1,9 @@
 'use client'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import api from '../../../functions/axios';
+import api from '../../../functions/api';
 import { useAuth } from '@/context/AuthContext';
 import { IUser } from '@/context/AuthContext';
 
@@ -12,7 +12,7 @@ function page() {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-    const {user, login} = useAuth()
+    const {AuthUser, login} = useAuth()
 
     const url = `http://localhost:4000`
 
@@ -34,8 +34,8 @@ function page() {
             console.log("this is user 1", user1)
             console.log(response)
             login(user1)
-            console.log("this is user from context ", user)
-            route.push('/newpage')
+            console.log("this is user from context ", AuthUser)
+            route.push('/todo')
         } catch (error) {
 
         }
