@@ -38,7 +38,7 @@ const sendEmail = async function (options: emailParams) {
             html: emailHtml
         });
     } catch (error) {
-        console.log("there is an issue with sending the email via nodemailer check the credentials please!", error)
+        // console.log("there is an issue with sending the email via nodemailer check the credentials please!", error)
     }
 }
 

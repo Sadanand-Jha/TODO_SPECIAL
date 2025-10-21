@@ -1,5 +1,5 @@
 import ApiError from "../utils/apiError.ts";
-import { asyncHandler } from "../utils/asyncHandler.ts";
+// import { asyncHandler } from "../utils/asyncHandler.ts";
 import { Response, Request, NextFunction } from "express";
 import jwt from 'jsonwebtoken'
 import User, { IUser } from "../model/users.model.ts";
@@ -15,9 +15,9 @@ declare global {
 const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.cookies?.accessToken;
-    console.log("hello world!");
-    console.log(token);
-    console.log("meow meow");
+    // console.log("hello world!");
+    // console.log(token);
+    // console.log("meow meow");
 
     if (!token) {
       return res.status(401).json(new ApiError(401, "Access token not found!"));
@@ -40,7 +40,7 @@ const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
       return res.status(401).json(new ApiError(401, "Invalid token payload!"));
     }
   } catch (error: any) {
-    console.error("JWT verification error:", error.message);
+    // console.error("JWT verification error:", error.message);
 
     // Handle specific JWT errors
     if (error.name === "TokenExpiredError") {

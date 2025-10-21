@@ -42,7 +42,7 @@ const sendEmailForRegister = asyncHandler(async (req: Request, res: Response) =>
   try {
     await sendEmail({email, subject: "Verification email", mailgenContent: emailOtpVerificationMailGen(email.split('@')[0], otp)})
   } catch (error) {
-    console.log("error from SENDING THE EMAIL")
+    // console.log("error from SENDING THE EMAIL")
     throw new ApiError(400, "Email failed")
   }
 
@@ -52,7 +52,7 @@ const sendEmailForRegister = asyncHandler(async (req: Request, res: Response) =>
 
 const otpCheckForRegister = asyncHandler(async(req: Request, res: Response) => {
   const {otp, email} = req.body
-  console.log({otp, email})
+  // console.log({otp, email})
   const findUser = await User.findOne({email})
   if(!findUser){
     return res.status(400)
@@ -60,7 +60,7 @@ const otpCheckForRegister = asyncHandler(async(req: Request, res: Response) => {
   }
   if(findUser?.emailVerificationToken != otp || Date.now() > findUser.emailVerificationExpiry!.getTime()){
     if(findUser?.emailVerificationToken !== otp) {
-      console.log("this is email token error !")
+      // console.log("this is email token error !")
     }
     return res.status(400)
     .json(new ApiError(400, "Email verification Failed"))
@@ -80,9 +80,9 @@ const otpCheckForRegister = asyncHandler(async(req: Request, res: Response) => {
 
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
-    console.log("this is from register user!")
+    // console.log("this is from register user!")
     const { email, password, fullname } = req.body
-    console.log("request reached here !")
+    // console.log("request reached here !")
 
     // check if user already exists or not
     const user: IUser | null = await User.findOne({ email })
@@ -117,8 +117,8 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = req.body
-    console.log("this is the email in controller ", email)
-    console.log("this is password", password)
+    // console.log("this is the email in controller ", email)
+    // console.log("this is password", password)
 
     const user = await User.findOne({ email })
     if (!user) {
@@ -128,7 +128,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
 
     // compare password
     const pass = await user.isPasswordCorrect(password)
-    console.log(pass)
+    // console.log(pass)
     if (!pass) {
         return res.status(400)
         .json(new ApiError(400, "password is incorrect!"))
@@ -184,7 +184,7 @@ const logoutUser = asyncHandler(async(req: Request, res: Response) => {
 })
 
 const getUserProfile = asyncHandler(async(req: Request, res: Response) => {
-    console.log("this reached in the controller")
+    // console.log("this reached in the controller")
     const user = await User.findById(req.user).select(
       "username email"
     )
@@ -196,9 +196,9 @@ const getUserProfile = asyncHandler(async(req: Request, res: Response) => {
 // ---
 
 const refreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
-  console.log("this is for testing refreshaccesstoken")
+  // console.log("this is for testing refreshaccesstoken")
   const incomingRefreshToken = req.cookies.refreshToken;
-  console.log("request reached to the refreshAccesstoken ", incomingRefreshToken)
+  // console.log("request reached to the refreshAccesstoken ", incomingRefreshToken)
 
   if (!incomingRefreshToken) {
     throw new ApiError(402, "Invalid refresh token!")
@@ -214,7 +214,7 @@ const refreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
 
     // find user in DB
     const user = await User.findById(decoded?.id);
-    console.log(user)
+    // console.log(user)
 
     if (!user) {
       throw new ApiError(404, "User not found");
@@ -229,12 +229,12 @@ const refreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
     const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user.email);
 
 
-    console.log("these are the two tokens", accessToken, refreshToken)
+    // console.log("these are the two tokens", accessToken, refreshToken)
     // save the new refresh token (optional security step)
     // user.refreshToken = refreshToken;
     // await user.save({ validateBeforeSave: false });
 
-    console.log('this is the new token',user.refreshToken)
+    // console.log('this is the new token',user.refreshToken)
 
     // set cookies again
     const options = {
