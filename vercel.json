@@ -1,0 +1,21 @@
+{
+  "projects": [
+    {
+      "name": "frontend",
+      "rootDirectory": "frontend"
+    },
+    {
+      "name": "backend",
+      "rootDirectory": "backend"
+    }
+  ],
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/frontend/$1" }
+  ]
+}

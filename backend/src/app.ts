@@ -1,13 +1,13 @@
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import {OpenAI} from 'openai'
+// import {OpenAI} from 'openai'
 const app = express()
 
 console.log("THIS IS CORS ORIGIN",process.env.CORS_ORIGIN)
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-console.log('i am printing ai ',openai)
+// const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// console.log('i am printing ai ',openai)
 
 
 app.use(cors({
@@ -17,7 +17,7 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"]
 }))
 
-console.log("THIS IS THE API KEY",process.env.OPENAI_API_KEY)
+// console.log("THIS IS THE API KEY",process.env.OPENAI_API_KEY)
 
 app.get('/', (req, res) => {
     res.send("Everything works fine")
