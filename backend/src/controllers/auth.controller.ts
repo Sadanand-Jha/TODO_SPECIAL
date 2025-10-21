@@ -3,8 +3,10 @@ import { asyncHandler } from "../utils/asyncHandler.ts"
 import User, { IUser } from "../model/users.model.ts"
 import ApiError from "../utils/apiError.ts"
 import ApiResponse from "../utils/apiResponse.ts"
-
+import sendEmail, {emailOtpVerificationMailGen} from "../utils/mail.ts"
 import jwt from "jsonwebtoken";
+
+
 const generateAccessTokenAndRefreshToken = async (email: string): Promise<{ refreshToken: string, accessToken: string }> => {
     const user = await User.findOne({ email })
 
@@ -15,6 +17,57 @@ const generateAccessTokenAndRefreshToken = async (email: string): Promise<{ refr
 }
 
 
+const sendEmailForRegister = asyncHandler(async (req: Request, res: Response) => {
+  const {email} = req.body
+  let otp = Math.floor(Math.random() * 1000);
+  
+  const findUser = await User.findOne({email, isEmailVerified: true})
+  if(findUser){
+    return res.status(400)
+    .json(new ApiResponse(400, "User already registered!"))
+  }
+
+  // if last time failed
+  await User.findOneAndDelete({email})
+
+  const user = await User.create({
+    username: email.split('@')[0],
+    email,
+    password: "meow meow",
+    emailVerificationToken: otp,
+    emailVerificationExpiry: new Date(Date.now() + 5 * 60 * 1000)
+  })  
+  await user.save()
+  
+  try {
+    await sendEmail({email, subject: "Verification email", mailgenContent: emailOtpVerificationMailGen(email.split('@')[0], otp)})
+  } catch (error) {
+    console.log("error from SENDING THE EMAIL")
+    throw new ApiError(400, "Email failed")
+  }
+
+  return res.status(200)
+  .json(new ApiResponse(200, "" , "Otp sent successfully!"))
+})
+
+const otpCheckForRegister = asyncHandler(async(req: Request, res: Response) => {
+  const {otp, email} = req.body
+  const findUser = await User.findOne({email})
+  if(!findUser){
+    return res.status(400)
+    .json(new ApiResponse(400, "","User not found!"))
+  }
+  if(findUser?.emailVerificationToken !== otp || Date.now() > findUser.emailVerificationExpiry.getTime()){
+    return res.status(400)
+    .json(new ApiResponse(400,"", "Email verification Failed"))
+  }
+  // findUser.isEmailVerified = true
+  // await findUser.save()
+
+  return res.status(200)
+  .json(new ApiResponse(200, "", "Email verified successfully!"))
+})
+
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
     console.log("this is from register user!")
@@ -22,25 +75,18 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
     console.log("request reached here !")
 
     // check if user already exists or not
-    const createdUser: IUser | null = await User.findOne({ email })
+    const user: IUser | null = await User.findOne({ email })
 
-    if (createdUser) {
-        return res
-            .status(400)
-            .json(new ApiError(400, "User already exists!"))
+    // if (createdUser) {
+    //     return res
+    //         .status(400)
+    //         .json(new ApiError(400, "User already exists!"))
+    // }
+
+    if(!user){
+      return res.status(400)
+      .json(new ApiError(400, "User not found!"))
     }
-
-    const user = await User.create({
-        email,
-        password,
-        fullname,
-        username: email.split('@')[0]
-    })
-
-    const { unHashedToken, hashedToken, tokenExpiry } = user.generateTemporaryToken()
-    user.emailVerificationToken = hashedToken
-    user.emailVerificationExpiry = tokenExpiry
-
     await user.save()
 
     const newUser: IUser = await User.findOne({ email }).select(
@@ -49,8 +95,6 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
     return res.status(200)
         .json(new ApiResponse(200, newUser, "User created succesfully!"))
-
-
 })
 
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
@@ -197,4 +241,4 @@ const refreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
-export { registerUser, loginUser, generateAccessTokenAndRefreshToken, logoutUser, getUserProfile, refreshAccessToken}
+export { registerUser, loginUser, generateAccessTokenAndRefreshToken, logoutUser, getUserProfile, refreshAccessToken, sendEmailForRegister, otpCheckForRegister}

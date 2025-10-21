@@ -32,6 +32,6 @@ Todo.watch().on("change", async (change) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log("Server running at port", PORT);
+server.listen(4000, '0.0.0.0', () => {
+  console.log('Server running');
 });

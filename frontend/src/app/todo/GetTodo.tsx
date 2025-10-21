@@ -46,6 +46,15 @@ function TodoBox() {
     // console.log(`this is data `, data)
   }, [todos])
 
+  useEffect(() => {
+    const sortedTodos = [...(todos || [])].sort((a, b) =>
+      new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+    );
+
+    setData(sortedTodos)
+  }, [todos])
+
+
   const fetchData = async () => {
     // console.log(`this is the link ${url}/api/v1/todo/gettodo`)
     const response = await api.get(`${url}/api/v1/todo/gettodo`, {
@@ -63,7 +72,7 @@ function TodoBox() {
     }));
 
     setTodos(responseTodos)
-    setData(responseTodos)
+
   }
 
 
@@ -116,41 +125,42 @@ function TodoBox() {
 
   return (
     <div className="max-h-92 mt-20 flex flex-row justify-center">
-      <div className="w-full max-h-[500px] overflow-y-auto  pr-2 hide-scrollbar">
+      <div className="w-full max-h-[500px] overflow-y-auto pr-2 hide-scrollbar">
         {data?.map((item, index) => {
           const isOverdue = item.deadline && Date.now() > Date.parse(item.deadline.toString());
 
           return (
             <div
               key={index}
-              className={`group flex flex-row justify-between items-center p-4 m-4 rounded-2xl border shadow-md transition-all duration-300 cursor-pointer
+              className={`group flex flex-col sm:flex-row justify-between sm:items-center p-4 m-4 rounded-2xl border shadow-md transition-all duration-300 cursor-pointer
               ${isOverdue
                   ? "bg-blue-800 text-white border-blue-900 font-semibold"
                   : "bg-blue-100 border-blue-300 hover:bg-blue-200"
                 }`}
             >
               {/* Todo text */}
-              <span className="flex-1 text-lg font-medium px-2 truncate">
+              <span className="text-lg font-medium px-2 break-words w-full sm:w-auto">
                 {item.todo}
               </span>
 
-              {/* Deadline */}
-              <span
-                className={`text-sm px-3 py-2 rounded-md 
-                ${isOverdue ? "bg-blue-900 text-white" : "bg-blue-200 text-blue-800"}`}
-              >
-                {item.deadline
-                  ? new Date(item.deadline).toISOString().split("T")[0]
-                  : "No deadline"}
-              </span>
+              {/* Date + Button Container */}
+              <div className="flex flex-row sm:flex-row justify-between sm:justify-end items-center w-full sm:w-auto mt-2 sm:mt-0 gap-2">
+                <span
+                  className={`text-sm px-3 py-2 rounded-md 
+                  ${isOverdue ? "bg-blue-900 text-white" : "bg-blue-200 text-blue-800"}`}
+                >
+                  {item.deadline
+                    ? new Date(item.deadline).toISOString().split("T")[0]
+                    : "No deadline"}
+                </span>
 
-              {/* Delete button */}
-              <button
-                className="ml-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
-                onClick={() => deleteTodo(index)}
-              >
-                Remove
-              </button>
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+                  onClick={() => deleteTodo(index)}
+                >
+                  Remove
+                </button>
+              </div>
             </div>
           );
         })}
@@ -158,7 +168,5 @@ function TodoBox() {
     </div>
   );
 
-
 }
-
 export default TodoBox

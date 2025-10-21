@@ -45,23 +45,22 @@ const sendEmail = async function (options: emailParams) {
 
 
 
-const emailVerificationEmailMailGen = (username: string, verificationUrl: string): object => {
+const emailOtpVerificationMailGen = (username: string, otpCode: Number): object => {
     return {
         body: {
             name: username,
-            intro: 'Welcome to our App! We\'re very excited to have you on board.',
+            intro: "Welcome to our App! We're very excited to have you on board.",
             action: {
-                instructions: 'To get started with Meow, please click here:',
+                instructions: `To verify your account, please use the following One-Time Password (OTP):`,
                 button: {
-                    color: '#22BC66', // Optional action button color
-                    text: 'Confirm your account',
-                    link: verificationUrl
+                    color: '#22BC66',
+                    text: otpCode
                 }
             },
-            outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.'
+            outro: 'This OTP is valid for 5 minutes. If you did not request this, please ignore this email.'
         }
     }
-};
+}
 
 const forgotPasswordEmailMailGen = (username: string, passwordResetUrl: string): object => {
     return {
@@ -82,4 +81,4 @@ const forgotPasswordEmailMailGen = (username: string, passwordResetUrl: string):
 };
 
 export default sendEmail
-export { forgotPasswordEmailMailGen, emailVerificationEmailMailGen }
+export { forgotPasswordEmailMailGen, emailOtpVerificationMailGen }

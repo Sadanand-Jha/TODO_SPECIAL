@@ -13,7 +13,7 @@ export default function Page() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-center md:text-left max-w-lg"
+        className="text-center md:text-left max-w-lg mt-80 sm:mt-0"
       >
         <h1 className="text-5xl md:text-6xl font-extrabold text-[#004AAD] mb-4">
           Welcome to{" "}

@@ -6,16 +6,16 @@ import jwt, { SignOptions } from 'jsonwebtoken'
 import crypto from 'crypto'
 
 
-export interface IUser extends Document{
+export interface IUser extends Document {
     _id: mongoose.Types.ObjectId
     username: string,
-    avatar: {url: string, localPath: string},
+    avatar: { url: string, localPath: string },
     email: string,
     fullname: string,
     password: string,
     isEmailVerified: boolean,
     refreshToken: string,
-    emailVerificationToken: string,
+    emailVerificationToken: number,
     emailVerificationExpiry: Date,
     forgotPasswordToken: string,
     forgotPasswordExpiry: Date,
@@ -45,18 +45,18 @@ const userSchema = new Schema({
         }
     },
     email: {
-        type:String,
+        type: String,
         required: true,
         unique: true,
         lowercase: true,
         trim: true
     },
     fullname: {
-        type:String,
+        type: String,
         trim: true,
     },
     password: {
-        type:String,
+        type: String,
         required: [true, "Password is required!"]
     },
     isEmailVerified: {
@@ -67,32 +67,31 @@ const userSchema = new Schema({
         type: String
     },
     forgetPasswordToken: {
-        type:String
+        type: String
     },
-    emailVerificationToken:{
-        type:String
+    emailVerificationToken: {
+        type: Number
     },
-    forgotPasswordExpiry:{
-        type:Date
+    forgotPasswordExpiry: {
+        type: Date
     },
-    emailVerificationExpiry:{
-        type:Date
+    emailVerificationExpiry: {
+        type: Date
     }
-},{
+}, {
     timestamps: true,
 })
 
-userSchema.pre("save",async function(next){
-    if(!this.isModified("password")) return next()
-    this.password = await bcrypt.hash(this.password, 10)
-    next()
-})
+userSchema.pre("save", async function () {
+    if (!this.isModified("password")) return;
+    this.password = await bcrypt.hash(this.password, 10);
+});
 
-userSchema.methods.isPasswordCorrect = async function(password: string): Promise<boolean>{
+userSchema.methods.isPasswordCorrect = async function (password: string): Promise<boolean> {
     return await bcrypt.compare(password, this.password) // plain_password and hashedPassword
 }
 
-userSchema.methods.generateRefreshToken = function (): string{
+userSchema.methods.generateRefreshToken = function (): string {
     return jwt.sign({
         id: this._id,
     },
@@ -103,7 +102,7 @@ userSchema.methods.generateRefreshToken = function (): string{
     )
 }
 
-userSchema.methods.generateAccessToken = function (): string{
+userSchema.methods.generateAccessToken = function (): string {
     console.log("Access token expiry:", process.env.ACCESS_TOKEN_EXPIRY);
 
     return jwt.sign({
@@ -121,12 +120,12 @@ userSchema.index(
     { expireAfterSeconds: 300, partialFilterExpression: { isEmailVerified: false } }
 );
 
-userSchema.methods.generateTemporaryToken = function(): object{
+userSchema.methods.generateTemporaryToken = function (): object {
     const unHashedToken: string = crypto.randomBytes(20).toString("hex")
     const hashedToken: string = crypto.createHash("sha256").update(unHashedToken).digest("hex")
 
     const tokenExpiry = Date.now() + (20 * 60 * 1000)
-    return {unHashedToken, hashedToken, tokenExpiry}
+    return { unHashedToken, hashedToken, tokenExpiry }
 }
 
 const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>("User", userSchema)

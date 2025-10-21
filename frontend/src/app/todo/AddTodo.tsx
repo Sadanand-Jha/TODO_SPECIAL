@@ -7,6 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import api from "../../../functions/api"
 import { useTodo } from "@/context/TodoContext"
+import { SourceTextModule } from "vm"
 
 export default function InputWithButton() {
   const [content, setContent] = useState("")
@@ -14,11 +15,14 @@ export default function InputWithButton() {
 
   const url = `http://localhost:4000`
 
-  
+
 
   // context api
 
-    const {setTodos} = useTodo()
+  const { todos, setTodos } = useTodo()
+
+
+ 
 
 
   const addTodo = async (): Promise<void> => {
@@ -26,7 +30,7 @@ export default function InputWithButton() {
 
     const data = {
       content,
-      deadline: deadline 
+      deadline: deadline
     }
 
     try {
@@ -35,8 +39,11 @@ export default function InputWithButton() {
       })
       console.log('this is response from add todo', response)
       console.log("Response:", response.data.data.todo)
-      setTodos((prev) => [...(prev || []), {todo: data.content, deadline: data.deadline}])
-      setContent("")  
+      setTodos((prev) => [...(prev || []), { todo: data.content, deadline: data.deadline }])
+
+      setDeadline(null)
+
+      setContent("")
     } catch (error) {
       console.error("Error adding todo:", error)
     }
@@ -52,7 +59,7 @@ export default function InputWithButton() {
         onChange={(e) => setContent(e.target.value)}
       />
 
-      
+
       <DatePicker
         selected={deadline}
         onChange={(date: Date | null) => setDeadline(date)}

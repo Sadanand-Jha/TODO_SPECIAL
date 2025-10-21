@@ -1,140 +1,164 @@
 'use client'
-import React from 'react'
-import { useState } from 'react'
+
+import Navbar from '../navbar/navbar_welcome'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import api from '../../../functions/api';
-import { useAuth } from '@/context/AuthContext';
-import { IUser } from '@/context/AuthContext';
+import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import api from '../../../functions/api'
+import { useAuth } from '@/context/AuthContext'
+import { IUser } from '@/context/AuthContext'
 
-function page() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
+function LoginPage() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
 
-    const {AuthUser, login} = useAuth()
-
+    const { AuthUser, login } = useAuth()
     const url = `http://localhost:4000`
-
-    const route = useRouter()
-
+    const router = useRouter()
 
     const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault()
 
-        console.log('Login attempted!');
-
-        const objx = { email, password };
         try {
-            const response = await api.post(`${url}/api/v1/auth/login`, objx, {
+            const response = await api.post(`${url}/api/v1/auth/login`, { email, password }, {
                 withCredentials: true
             })
-            const user1: IUser = {email: response.data.data.email, username: response.data.data.username}
-
-            console.log("this is user 1", user1)
-            console.log(response)
-            login(user1)
-            console.log("this is user from context ", AuthUser)
-            route.push('/todo')
+            const user: IUser = {
+                email: response.data.data.email,
+                username: response.data.data.username
+            }
+            login(user)
+            router.push('/todo')
         } catch (error) {
-
+            console.error(error)
+            alert('Login failed. Please check your credentials.')
         }
-    };
+    }
+
     return (
-        <div className="flex flex-col lg:flex-row h-screen font-inter " style={{ fontFamily: 'sanserif' }}>
-            {/* Left pane: Login form */}
-            <div className="flex-1 flex items-center justify-center p-8 lg:p-16">
-                <div className="w-full max-w-lg space-y-8">
-                    {/* Logo and Welcome text */}
-
-
-                    <div className="space-y-2">
-                        <h1 className="text-3xl font-bold">Welcome Back!</h1>
-                        <p className="text-gray-600">
-                            A picture is a poem without words. Start writing your story today.
+        <div className="flex flex-col lg:flex-row h-screen font-inter">
+            {/* Left: Login form */}
+            <Navbar navbar_word='Register Now!'/>
+            <div className="flex-1 mt-20 flex items-center justify-center p-8 lg:p-16 bg-gradient-to-b from-blue-50 to-blue-100">
+                <div className="w-full max-w-lg space-y-8 bg-white p-8 rounded-2xl shadow-lg border border-blue-100">
+                    {/* Header */}
+                    <div className="space-y-2 text-center">
+                        <h1 className="text-3xl font-bold text-blue-500">Welcome Back 👋</h1>
+                        <p className="text-gray-500 text-sm">
+                            Organize your world, chase your goals, and conquer your day.
                         </p>
                     </div>
 
-                    {/* Form fields */}
+                    {/* Form */}
                     <form onSubmit={handleLogin} className="space-y-6">
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
+                            <label htmlFor="email" className="block text-sm font-medium text-blue-500">
+                                Email
+                            </label>
+                            <div className="mt-1 relative rounded-md">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Mail className="h-5 w-5 text-gray-400" />
+                                    <Mail className="h-5 w-5 text-blue-400" />
                                 </div>
                                 <input
                                     id="email"
-                                    name="email"
                                     type="email"
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="block w-full pl-10 pr-3 py-2 border-2 border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    placeholder="Enter your email"
+                                    className="block w-full pl-10 pr-3 py-2 border border-blue-200 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                    placeholder="superman171@gmail.com"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
+                            <label htmlFor="password" className="block text-sm font-medium text-blue-500">
+                                Password
+                            </label>
+                            <div className="mt-1 relative rounded-md">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Lock className="h-5 w-5 text-gray-400" />
+                                    <Lock className="h-5 w-5 text-blue-400" />
                                 </div>
                                 <input
                                     id="password"
-                                    name="password"
                                     type={showPassword ? 'text' : 'password'}
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full pl-10 pr-10 py-2 border-2 border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    placeholder="Enter your password"
+                                    className="block w-full pl-10 pr-10 py-2 border border-blue-200 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                    placeholder="It's a secret"
                                 />
-                                <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
-                                    {showPassword ? <EyeOff className="h-5 w-5 text-gray-400" /> : <Eye className="h-5 w-5 text-gray-400" />}
+                                <div
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? (
+                                        <EyeOff className="h-5 w-5 text-blue-400" />
+                                    ) : (
+                                        <Eye className="h-5 w-5 text-blue-400" />
+                                    )}
                                 </div>
                             </div>
                         </div>
 
                         <div className="flex items-center justify-end">
-                            <a href="#" className="text-sm text-indigo-600 hover:text-indigo-500">Forgot Password?</a>
+                            <a href="#" className="text-sm text-blue-400 hover:underline">
+                                Forgot Password?
+                            </a>
                         </div>
 
                         <button
                             type="submit"
-                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black  hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black cursor-pointer"
+                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
                         >
                             Log In
                         </button>
                     </form>
 
-                    {/* Social login buttons */}
+                    {/* Divider */}
                     <div className="relative text-center">
                         <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-gray-300"></div>
+                            <div className="w-full border-t border-gray-200"></div>
                         </div>
-                        <div className="relative inline-block bg-gray-100 px-4 text-sm font-medium text-gray-500">
+                        <div className="relative inline-block bg-white px-4 text-sm font-medium text-gray-500">
                             OR
                         </div>
                     </div>
 
+                    {/* Signup link */}
                     <div className="flex items-center justify-center text-sm text-gray-600">
-                        <span>Don't have an Account? </span>
-                        <a href="/register" className="font-medium text-indigo-600 hover:text-indigo-500 ml-1">Sign Up</a>
+                        <span>Don't have an Account?</span>
+                        <a
+                            href="/register"
+                            className="font-medium text-blue-400 hover:underline ml-1"
+                        >
+                            Sign Up
+                        </a>
                     </div>
                 </div>
             </div>
 
-            {/* Right pane: Marketing content */}
-            <div className="hidden lg:flex flex-1 items-center justify-center p-16 rounded-l-lg" style={{ background: 'linear-gradient(225deg, #0f1d2c 0%, #064e6f 100%)' }}>
-                <div className="w-full max-w-xl text-white space-y-8">
-                    <img src="/imageforimega.jpeg" alt="" height={700} />
+            {/* Right: Image section */}
+            <div
+                className="hidden mt-18 lg:flex flex-1 items-center justify-center p-16"
+                style={{
+                    background: 'linear-gradient(225deg, #004e92 0%, #000428 100%)',
+                }}
+            >
+                <div className="w-full max-w-xl text-white text-center space-y-8">
+                    <img
+                        src="/loginPage.jpg"
+                        alt="Motivational illustration"
+                        className="mx-auto rounded-2xl shadow-xl"
+                    />
+                    <p className="text-lg opacity-90 font-bold">
+                        “The future depends on what you do today.”
+                    </p>
                 </div>
             </div>
         </div>
     )
 }
 
-export default page
+export default LoginPage
