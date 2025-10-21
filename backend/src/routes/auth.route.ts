@@ -10,6 +10,6 @@ router.route('/logout').get(verifyJWT, logoutUser)
 router.route('/profile').get(verifyJWT, getUserProfile)
 router.route('/refresh').get(refreshAccessToken)
 router.route('/getotp').post(sendEmailForRegister)
-router.route('/verifyotp').get(otpCheckForRegister)
+router.route('/verifyotp').post(otpCheckForRegister)
 
 export default router

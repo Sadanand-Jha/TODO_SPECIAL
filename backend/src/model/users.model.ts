@@ -4,7 +4,7 @@ import { Document } from "mongoose";
 import bcrypt from 'bcrypt'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import crypto from 'crypto'
-import { UpdatePhoneMultiFactorInfoRequest } from "firebase-admin/auth";
+// import { UpdatePhoneMultiFactorInfoRequest } from "firebase-admin/auth";
 
 
 export interface IUser extends Document {
@@ -16,9 +16,9 @@ export interface IUser extends Document {
     password: string,
     isEmailVerified: boolean,
     refreshToken: string,
-    emailVerificationToken: number | undefined,
+    emailVerificationToken: string | undefined,
     emailVerificationExpiry: Date | undefined,
-    forgotPasswordToken: number | undefined,
+    forgotPasswordToken: string | undefined,
     forgotPasswordExpiry: Date | undefined,
     isPasswordCorrect: Function,
     generateRefreshToken: Function,
@@ -71,7 +71,7 @@ const userSchema = new Schema({
         type: String
     },
     emailVerificationToken: {
-        type: Number
+        type: String
     },
     forgotPasswordExpiry: {
         type: Date

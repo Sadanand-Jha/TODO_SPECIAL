@@ -52,20 +52,25 @@ const sendEmailForRegister = asyncHandler(async (req: Request, res: Response) =>
 
 const otpCheckForRegister = asyncHandler(async(req: Request, res: Response) => {
   const {otp, email} = req.body
+  console.log({otp, email})
   const findUser = await User.findOne({email})
   if(!findUser){
     return res.status(400)
-    .json(new ApiResponse(400, "","User not found!"))
+    .json(new ApiError(400, "User not found!"))
   }
-  if(findUser?.emailVerificationToken !== otp || Date.now() > findUser.emailVerificationExpiry!.getTime()){
+  if(findUser?.emailVerificationToken != otp || Date.now() > findUser.emailVerificationExpiry!.getTime()){
+    if(findUser?.emailVerificationToken !== otp) {
+      console.log("this is email token error !")
+    }
     return res.status(400)
-    .json(new ApiResponse(400,"", "Email verification Failed"))
+    .json(new ApiError(400, "Email verification Failed"))
   }
-  // findUser.isEmailVerified = true
-  // await findUser.save()
+ 
 
   findUser.emailVerificationExpiry = undefined
   findUser.emailVerificationToken = undefined
+
+  findUser.isEmailVerified = true
 
   await findUser.save()
 
@@ -81,6 +86,15 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
     // check if user already exists or not
     const user: IUser | null = await User.findOne({ email })
+
+    if(!user){
+      return new ApiError(400, "User not found while registering")
+    }
+
+    user.password = password
+    user.fullname = fullname
+
+    await user.save()
 
     // if (createdUser) {
     //     return res

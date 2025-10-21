@@ -4,21 +4,17 @@ import api from '../../../functions/api'
 import { useRouter } from 'next/navigation'
 import Navbar from '../navbar/navbar_welcome'
 import './mycss.css'
+
 function RegisterPage() {
     const [step, setStep] = useState(1)
-
-    // Step 1: Email
     const [email, setEmail] = useState("")
-
-    // Step 2: OTP
     const [otp, setOtp] = useState("")
-
-    // Step 3: Details
     const [firstname, setFirstname] = useState("")
     const [lastname, setLastname] = useState("")
     const [password, setPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
     const [terms, setTerms] = useState(false)
+    const [ROEmail, setROEmail] = useState(false)
 
     const route = useRouter()
     const url = process.env.NEXT_PUBLIC_BACKEND_URL
@@ -28,6 +24,7 @@ function RegisterPage() {
         try {
             await api.post(`${url}/api/v1/auth/getotp`, { email })
             setStep(2)
+            setROEmail(true)
         } catch (error) {
             console.error(error)
             alert("Failed to send OTP")
@@ -38,10 +35,10 @@ function RegisterPage() {
         if (!otp) return alert("Enter OTP")
 
         try {
-            await 
+            await api.post(`${url}/api/v1/auth/verifyotp`, { otp, email })
             setStep(3)
         } catch (error) {
-            console.error(error)
+            console.error(`this is the error! `, error)
             alert("OTP verification failed")
         }
     }
@@ -56,8 +53,8 @@ function RegisterPage() {
         }
 
         try {
-            // const res = await api.post(`${url}/api/v1/auth/register`, formdata)
-            // alert("Registration Successful")
+            const res = await api.post(`${url}/api/v1/auth/register`, formdata)
+            console.log(`this is response`, res)
             route.push('/login')
         } catch (error) {
             console.error(error)
@@ -66,22 +63,50 @@ function RegisterPage() {
     }
 
     return (
-        <div className="bg-blue-100 min-h-screen flex justify-center items-center">
+        <div className="relative min-h-screen flex justify-center items-center font-inter overflow-hidden">
+            {/* Navbar */}
             <Navbar navbar_word='Home' />
-            <div className="w-full max-w-md p-8 bg-white border border-blue-300 rounded-lg shadow-md transition ">
+
+            {/* Tickmark background pattern */}
+            <div
+                className="absolute mt-19 inset-0 bg-[url('/logo.png')] bg-cover bg-center opacity-45"
+                style={{
+                    backgroundRepeat: 'repeat',
+                    backgroundSize: '40px 40px',
+                }}
+            ></div>
+
+            {/* Blue overlay for contrast */}
+            <div className="absolute mt-19 inset-0 bg-gradient-to-b from-blue-900/40 to-blue-950/60"></div>
+
+            {/* Registration Card */}
+            <div className="relative z-10 w-full max-w-md p-8 bg-white/90 backdrop-blur-lg border border-blue-200 rounded-xl shadow-2xl">
                 {step === 1 && (
                     <div className="space-y-4">
-                        <h2 className="text-2xl font-bold text-blue-500 text-center">Enter your Email</h2>
+                        <h2 className="text-2xl font-bold text-blue-600 text-center">Enter your Email</h2>
+                        <div className='m-10'>
+                            <span className=" text-center text-lg font-semibold text-gray-800">
+                                <div>
+                                    You bring the <span className="text-blue-600">DREAMS</span>.
+                                </div>
+                                <div>
+                                    I’ll bring the <span className="text-green-600 text-center">TOOLS</span>.</div>
+                            </span>
+                        </div>
+                        <span className='text-blue-500 font-semibold'>
+                            Email
+                        </span>
                         <input
                             type="email"
-                            placeholder="superman171@gmail.com"
-                            className="w-full p-3 border border-blue-300 rounded focus:outline-none focus:ring-2  input-wrapper duration-400"
+                            placeholder="eg. superman171@gmail.com"
+                            className="w-full p-3 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={email}
+                            readOnly={ROEmail}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <button
                             onClick={handleEmailSubmit}
-                            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+                            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-all duration-200"
                         >
                             Send OTP
                         </button>
@@ -100,7 +125,7 @@ function RegisterPage() {
                         />
                         <button
                             onClick={handleOtpVerify}
-                            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+                            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-all duration-200"
                         >
                             Verify
                         </button>
@@ -114,14 +139,14 @@ function RegisterPage() {
                             <input
                                 type="text"
                                 placeholder="First Name"
-                                className="w-1/2 p-3 border border-blue-300 rounded"
+                                className="w-1/2 p-3 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={firstname}
                                 onChange={(e) => setFirstname(e.target.value)}
                             />
                             <input
                                 type="text"
                                 placeholder="Last Name"
-                                className="w-1/2 p-3 border border-blue-300 rounded"
+                                className="w-1/2 p-3 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={lastname}
                                 onChange={(e) => setLastname(e.target.value)}
                             />
@@ -130,7 +155,7 @@ function RegisterPage() {
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Password"
-                                className="w-full p-3 border border-blue-300 rounded"
+                                className="w-full p-3 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
@@ -156,7 +181,7 @@ function RegisterPage() {
 
                         <button
                             onClick={handleRegister}
-                            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+                            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-all duration-200"
                         >
                             Register
                         </button>
