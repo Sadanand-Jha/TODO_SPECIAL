@@ -57,12 +57,17 @@ const otpCheckForRegister = asyncHandler(async(req: Request, res: Response) => {
     return res.status(400)
     .json(new ApiResponse(400, "","User not found!"))
   }
-  if(findUser?.emailVerificationToken !== otp || Date.now() > findUser.emailVerificationExpiry.getTime()){
+  if(findUser?.emailVerificationToken !== otp || Date.now() > findUser.emailVerificationExpiry!.getTime()){
     return res.status(400)
     .json(new ApiResponse(400,"", "Email verification Failed"))
   }
   // findUser.isEmailVerified = true
   // await findUser.save()
+
+  findUser.emailVerificationExpiry = undefined
+  findUser.emailVerificationToken = undefined
+
+  await findUser.save()
 
   return res.status(200)
   .json(new ApiResponse(200, "", "Email verified successfully!"))
@@ -87,7 +92,6 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
       return res.status(400)
       .json(new ApiError(400, "User not found!"))
     }
-    await user.save()
 
     const newUser: IUser = await User.findOne({ email }).select(
         "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"

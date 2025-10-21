@@ -148,9 +148,9 @@ function LoginPage() {
             >
                 <div className="w-full max-w-xl text-white text-center space-y-8">
                     <img
-                        src="/loginPage.jpg"
+                        src="/logo.png"
                         alt="Motivational illustration"
-                        className="mx-auto rounded-2xl shadow-xl"
+                        className="mx-auto rounded-2xl shadow-sm"
                     />
                     <p className="text-lg opacity-90 font-bold">
                         “The future depends on what you do today.”
