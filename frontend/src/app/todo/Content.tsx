@@ -1,7 +1,7 @@
 import React from 'react'
 import AddTodo from './AddTodo'
 import TodoBox from './GetTodo'
-import Navbar from '../navbar/navbar_todo'
+// import Navbar from '../navbar/navbar_todo'
 
 function Content() {
   return (
