@@ -1,9 +1,9 @@
 import { Response, Request } from "express"
-import { asyncHandler } from "../utils/asyncHandler.ts"
-import User, { IUser } from "../model/users.model.ts"
-import ApiError from "../utils/apiError.ts"
-import ApiResponse from "../utils/apiResponse.ts"
-import sendEmail, {emailOtpVerificationMailGen} from "../utils/mail.ts"
+import { asyncHandler } from "../utils/asyncHandler"
+import User, { IUser } from "../model/users.model"
+import ApiError from "../utils/apiError"
+import ApiResponse from "../utils/apiResponse"
+import sendEmail, {emailOtpVerificationMailGen} from "../utils/mail"
 import jwt from "jsonwebtoken";
 
 

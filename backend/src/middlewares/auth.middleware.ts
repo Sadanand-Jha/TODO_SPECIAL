@@ -1,8 +1,8 @@
-import ApiError from "../utils/apiError.ts";
-// import { asyncHandler } from "../utils/asyncHandler.ts";
+import ApiError from "../utils/apiError";
+// import { asyncHandler } from "../utils/asyncHandler";
 import { Response, Request, NextFunction } from "express";
 import jwt from 'jsonwebtoken'
-import User, { IUser } from "../model/users.model.ts";
+import User, { IUser } from "../model/users.model";
 
 declare global {
   namespace Express {

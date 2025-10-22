@@ -1,6 +1,6 @@
-import './loadENV.ts'
-import app from './app.ts'
-import connectDB from './db/index.ts'
+import './loadENV'
+import app from './app'
+import connectDB from './db/index'
 
 
 

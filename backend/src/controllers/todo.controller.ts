@@ -1,9 +1,9 @@
-import { asyncHandler } from "../utils/asyncHandler.ts";
+import { asyncHandler } from "../utils/asyncHandler";
 import { Request, Response } from "express";
-import Todo from "../model/todo.model.ts";
-import { ITodo } from "../model/todo.model.ts";
-import ApiResponse from "../utils/apiResponse.ts";
-import ApiError from "../utils/apiError.ts";
+import Todo from "../model/todo.model";
+import { ITodo } from "../model/todo.model";
+import ApiResponse from "../utils/apiResponse";
+import ApiError from "../utils/apiError";
 
 const addTodo = asyncHandler(async(req: Request, res: Response) => {
     const {content, deadline} = req.body

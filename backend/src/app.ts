@@ -25,15 +25,11 @@ app.get('/', (req, res) => {
 app.use(cookieParser())
 app.use(express.json())
 
-import authRouter from './routes/auth.route.ts'
+import authRouter from './routes/auth.route'
 app.use('/api/v1/auth', authRouter)
 
-import todoRouter from './routes/todo.route.ts'
+import todoRouter from './routes/todo.route'
 app.use('/api/v1/todo', todoRouter)
-
-
-import todoSuggestRoute from './routes/openAi.route.ts'
-app.use("/api/v1/openai", todoSuggestRoute);
 
 
 

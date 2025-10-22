@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { addTodo, deleteTodo, getAllTodo } from "../controllers/todo.controller.ts";
-import verifyJWT from "../middlewares/auth.middleware.ts";
+import { addTodo, deleteTodo, getAllTodo } from "../controllers/todo.controller";
+import verifyJWT from "../middlewares/auth.middleware";
 
 const router = Router()
 router.route('/addtodo').post(verifyJWT,addTodo)
