@@ -11,7 +11,7 @@ console.log("THIS IS CORS ORIGIN",process.env.CORS_ORIGIN)
 
 
 app.use(cors({
-    origin: `http://localhost:3000`,
+    origin: process.env.CORS_ORIGIN,
     credentials: true, 
     methods: ["GET", "POST", "DELETE", "UPDATE", "PATCH", "OPTIONS"], 
     allowedHeaders: ["Content-Type", "Authorization"]
