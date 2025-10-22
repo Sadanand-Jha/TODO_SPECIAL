@@ -52,7 +52,7 @@ function LoginPage() {
             <div className="absolute mt-19 inset-0 bg-gradient-to-b from-blue-900/60 to-blue-950/70"></div>
 
             {/* Login Box */}
-            <div className="relative z-10 w-full max-w-md p-8 bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl border border-blue-200">
+            <div className="mt-12 relative h-120 z-10 w-8/9 max-w-md p-8 bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl border border-blue-200">
                 <div className="text-center mb-6">
                     <h1 className="text-3xl font-bold text-blue-600">Welcome Back 👋</h1>
                     <p className="text-gray-500 text-sm">

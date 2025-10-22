@@ -1,33 +1,41 @@
 // api.js
+'use client'
 import axios from "axios";
-
+// import { useRouter } from "next/navigation";
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL,
   withCredentials: true, // send cookies automatically
 });
 
 const url = process.env.NEXT_PUBLIC_BACKEND_URL
-
+// const router = useRouter()
 // Response interceptor for handling expired tokens
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    console.log("interceptor is working !")
-    console.log(error.response.status);
+    // Prevent retry loop for refresh endpoint
+    if (originalRequest.url === "/auth/refresh") {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      console.log("this is calling")
-      await api.get("/auth/refresh"); // refresh token
+
+      try {
+        await api.get("/auth/refresh"); // refresh token
+      } catch (err) {
+        window.location.href = "/login"; // redirect if refresh fails
+        return;
+      }
+
       return api(originalRequest); // retry original request
-    }
-    if(error.response?.status == 402){
-      window.location.href = '/login'
     }
 
     return Promise.reject(error);
   }
 );
+
 
 export default api;

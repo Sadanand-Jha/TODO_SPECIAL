@@ -117,11 +117,12 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body
-  // console.log("this is the email in controller ", email)
-  // console.log("this is password", password)
+  console.log("this is the email in controller ", email)
+  console.log("this is password", password)
 
   const user = await User.findOne({ email })
   if (!user) {
+    console.log("this goes here")
     return res.status(400)
       .json(new ApiError(400, "email not found!"))
   }
@@ -130,6 +131,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const pass = await user.isPasswordCorrect(password)
   // console.log(pass)
   if (!pass) {
+    console.log("password is incorrect")
     return res.status(400)
       .json(new ApiError(400, "password is incorrect!"))
   }
@@ -150,7 +152,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production" ? true : false,
     sameSite: process.env.NODE_ENV === "production" ? "none" as const : "lax" as const,
-    maxAge: 2 * 60 * 60 * 1000, // 2 hours
+    maxAge: 12 * 60 * 60 * 1000, // 2 hours
   };
 
   return res.status(200)
@@ -205,7 +207,7 @@ const refreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
   // console.log("request reached to the refreshAccesstoken ", incomingRefreshToken)
 
   if (!incomingRefreshToken) {
-    throw new ApiError(402, "Invalid refresh token!")
+    throw new ApiError(401, "Invalid refresh token!")
   }
 
 
@@ -221,7 +223,7 @@ const refreshAccessToken = asyncHandler(async (req: Request, res: Response) => {
     // console.log(user)
 
     if (!user) {
-      throw new ApiError(404, "User not found");
+      throw new ApiError(401, "User not found");
     }
 
     // optional: check if refresh token matches the one stored in DB

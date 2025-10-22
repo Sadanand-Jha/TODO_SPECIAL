@@ -1,5 +1,6 @@
 import Mailgen from "mailgen";
 import nodemailer from 'nodemailer'
+import ApiError from "./apiError";
 
 export type emailParams = {
     mailgenContent: any,
@@ -38,6 +39,8 @@ const sendEmail = async function (options: emailParams) {
             html: emailHtml
         });
     } catch (error) {
+        console.log("there is an error while sending the mail")
+        throw new ApiError(400, "failed email sending by nodemailer")
         // console.log("there is an issue with sending the email via nodemailer check the credentials please!", error)
     }
 }

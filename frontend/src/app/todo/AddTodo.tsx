@@ -22,7 +22,7 @@ export default function InputWithButton() {
   const { todos, setTodos } = useTodo()
 
 
- 
+
 
 
   const addTodo = async (): Promise<void> => {
@@ -33,7 +33,7 @@ export default function InputWithButton() {
       deadline: deadline
     }
 
-      try {
+    try {
       const response = await api.post(`${url}/api/v1/todo/addtodo`, data, {
         withCredentials: true
       })
@@ -52,35 +52,37 @@ export default function InputWithButton() {
   }
 
   return (
-    <div className="input-wrapper w-full relative">
-      <Input
-        type="text"
-        className="text-blue-500 placeholder-blue-500 selection:bg-white selection:text-blue-900 border border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md p-2"
-        placeholder="Got something to do? Type it here!"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
+    <div className="input-wrapper w-full relative flex flex-col md:flex-row">
+      <div>
+        <Input
+          type="text"
+          className="text-blue-500 placeholder-blue-500 selection:bg-white selection:text-blue-900 border border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md p-2"
+          placeholder="Got something to do? Type it here!"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        />
+      </div>
 
-
-      <DatePicker
-        selected={deadline}
-        onChange={(date: Date | null) => setDeadline(date)}
-        showTimeSelect
-        dateFormat="Pp"
-        placeholderText="Select deadline"
-        className="font-semibold text-blue-800"
-        portalId="root"
-        withPortal
-      />
-
-      <Button
-        type="button"
-        variant="outline"
-        className="btn"
-        onClick={addTodo}
-      >
-        Add Todo
-      </Button>
+      <div>
+        <DatePicker
+          selected={deadline}
+          onChange={(date: Date | null) => setDeadline(date)}
+          showTimeSelect
+          dateFormat="Pp"
+          placeholderText="Select deadline"
+          className="font-semibold text-blue-800"
+          portalId="root"
+          withPortal
+        />
+        <Button
+          type="button"
+          variant="outline"
+          className="btn w-full"
+          onClick={addTodo}
+        >
+          Add Todo
+        </Button>
+      </div>
     </div>
   )
 }

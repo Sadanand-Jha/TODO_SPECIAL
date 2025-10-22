@@ -60,6 +60,7 @@ export default function ProfilePage() {
       logout()
       const res = await api.get(`${url}/api/v1/auth/logout`)
       console.log(res)
+      router.push('/login')
     } catch (error) {
       console.log(`issue from lgtbtn `,error)
     }

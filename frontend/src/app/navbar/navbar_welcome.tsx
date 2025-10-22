@@ -14,13 +14,6 @@ export default function Navbar({ navbar_word }: NavbarProps) {
   const router = useRouter()
 
 
-  // const [loginR, setLoginR] = useState(false)
-
-  // if (navbar_word == 'Register Now!' || navbar_word == 'Home') {
-  //   setLoginR(true)
-  // }
-
-
   const url = process.env.NEXT_PUBLIC_BACKEND_URL
 
   const { AuthUser, setAuthUser, logout } = useAuth()
@@ -31,6 +24,9 @@ export default function Navbar({ navbar_word }: NavbarProps) {
     }
     else if (navbar_word === 'Register Now!') {
       router.push('/register')
+    }
+    else if (navbar_word === 'Home') {
+      router.push('/login')
     }
     else {
       router.push("/profile")
@@ -52,24 +48,26 @@ export default function Navbar({ navbar_word }: NavbarProps) {
       <div className="max-w-7xl mx-auto flex items-center justify-between p-4">
 
         {/* Logo + Brand */}
-        <a href="/todo" className="flex items-center space-x-3">
-          <Image
-            src="/logo.png"
-            height={45}
-            width={45}
-            alt="Doingo Logo"
-            className="rounded-full hover:scale-110 transition-transform duration-300"
-          />
-          <span className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent tracking-wide">
-            Doingo
-          </span>
-        </a>
+        <div>
+          <a href="/todo" className="flex items-center space-x-3">
+            <Image
+              src="/logo.png"
+              height={45}
+              width={45}
+              alt="Doingo Logo"
+              className="rounded-full hover:scale-110 transition-transform duration-300"
+            />
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent tracking-wide">
+              Doingo
+            </span>
+          </a>
 
+        </div>
         {/* Profile / Get Started Button */}
         <div>
           <button
             onClick={routeit}
-            className="text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 font-semibold rounded-lg text-sm px-6 py-2 transition-all duration-300 hover:scale-105 shadow-md focus:ring-4 focus:ring-blue-300"
+            className="text-white  sm:w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 font-semibold rounded-lg text-sm px-6 py-2 transition-all duration-300 hover:scale-105 shadow-md focus:ring-4 focus:ring-blue-300"
           >
             {navbar_word}
           </button>

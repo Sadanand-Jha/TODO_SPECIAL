@@ -64,7 +64,7 @@ function Page() {
         <button className="bg-red-700 text-white rounded-xl p-2 cursor-pointer" onClick={logout}>Logout!</button>
       </div> */}
       <div>
-        <Navbar navbar_word={user.username} />
+        <Navbar navbar_word="Profile" />
       </div>
       <Content />
     </div>

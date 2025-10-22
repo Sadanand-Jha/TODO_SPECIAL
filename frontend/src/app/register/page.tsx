@@ -65,7 +65,7 @@ function RegisterPage() {
     return (
         <div className="relative min-h-screen flex justify-center items-center font-inter overflow-hidden">
             {/* Navbar */}
-            <Navbar navbar_word='Home' />
+            <Navbar navbar_word='Login' />
 
             {/* Tickmark background pattern */}
             <div
@@ -80,7 +80,7 @@ function RegisterPage() {
             <div className="absolute mt-19 inset-0 bg-gradient-to-b from-blue-900/40 to-blue-950/60"></div>
 
             {/* Registration Card */}
-            <div className="relative z-10 w-full max-w-md p-8 bg-white/90 backdrop-blur-lg border border-blue-200 rounded-xl shadow-2xl">
+            <div className="relative z-10 w-8/9 sm:w-full h-120 sm:h-full max-w-md p-8 bg-white/90 backdrop-blur-lg border border-blue-200 rounded-xl shadow-2xl">
                 {step === 1 && (
                     <div className="space-y-4">
                         <h2 className="text-2xl font-bold text-blue-600 text-center">Enter your Email</h2>
