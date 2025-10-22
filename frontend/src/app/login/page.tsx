@@ -14,7 +14,7 @@ function LoginPage() {
     const [showPassword, setShowPassword] = useState(false)
     const { login } = useAuth()
     const router = useRouter()
-    const url = `http://localhost:4000`
+    const url = process.env.NEXT_PUBLIC_BACKEND_URL
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()

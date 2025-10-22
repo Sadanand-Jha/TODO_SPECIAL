@@ -20,7 +20,7 @@ function TodoBox() {
 
 
   async function fetchUser() {
-    const res = await api.get("http://localhost:4000/api/v1/auth/profile", {
+    const res = await api.get(`${url}/api/v1/auth/profile`, {
       withCredentials: true, // important: sends the cookie
     });
     console.log('this is from the fetchuser ', res)

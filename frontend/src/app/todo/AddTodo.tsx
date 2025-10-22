@@ -13,7 +13,7 @@ export default function InputWithButton() {
   const [content, setContent] = useState("")
   const [deadline, setDeadline] = useState<Date | null>(null)
 
-  const url = `http://localhost:4000`
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL
 
 
 
