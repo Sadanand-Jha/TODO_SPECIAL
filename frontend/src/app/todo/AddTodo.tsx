@@ -33,13 +33,15 @@ export default function InputWithButton() {
       deadline: deadline
     }
 
-    try {
+      try {
       const response = await api.post(`${url}/api/v1/todo/addtodo`, data, {
         withCredentials: true
       })
       console.log('this is response from add todo', response)
       console.log("Response:", response.data.data.todo)
-      setTodos((prev) => [...(prev || []), { todo: data.content, deadline: data.deadline }])
+      // ensure deadline is a Date (fallback to now if null) so it matches the expected todoType
+      const newTodo = { todo: data.content, deadline: data.deadline ?? new Date() }
+      setTodos((prev) => [...(prev || []), newTodo])
 
       setDeadline(null)
 
