@@ -117,8 +117,8 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = req.body
-    // console.log("this is the email in controller ", email)
-    // console.log("this is password", password)
+    console.log("this is the email in controller ", email)
+    console.log("this is password", password)
 
     const user = await User.findOne({ email })
     if (!user) {

@@ -14,13 +14,13 @@ function Page() {
 
   // CONTEXT
   const { AuthUser, setAuthUser } = useAuth()
-
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL
 
 
 
   const logout = async () => {
     console.log("logout is pressed!")
-    const res = await api.get("http://localhost:4000/api/v1/auth/logout", {
+    const res = await api.get(`${url}/api/v1/auth/logout`, {
       withCredentials: true
     })
     window.location.reload()
@@ -30,7 +30,7 @@ function Page() {
     const fetchProfile = async () => {
       try {
         console.log("this is in the client side")
-        const res = await api.get("http://localhost:4000/api/v1/auth/profile", {
+        const res = await api.get(`${url}/api/v1/auth/profile`, {
           withCredentials: true, // important: sends the cookie
         });
         console.log(res)

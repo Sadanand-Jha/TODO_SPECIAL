@@ -17,12 +17,14 @@ export default function ProfilePage() {
 
   const { AuthUser, setAuthUser, logout } = useAuth()
 
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL
+
 
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await api.get("http://localhost:4000/api/v1/auth/profile", {
+        const res = await api.get(`${url}/api/v1/auth/profile`, {
           withCredentials: true,
         });
         setUser(res.data.data.user);
@@ -51,7 +53,7 @@ export default function ProfilePage() {
     }, 5000);
   }, []);
 
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL
+
 
   const lgtBtn = async () => {
     try {
