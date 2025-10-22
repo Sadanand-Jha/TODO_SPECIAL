@@ -52,37 +52,42 @@ export default function InputWithButton() {
   }
 
   return (
-    <div className="input-wrapper w-full relative flex flex-col md:flex-row">
-      <div>
+    <div className="input-wrapper w-full relative flex flex-col md:flex-row gap-2">
+      <div className="flex-1">
         <Input
           type="text"
-          className="text-blue-500 placeholder-blue-500 selection:bg-white selection:text-blue-900 border border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md p-2"
+          className="text-blue-500 placeholder-blue-500 selection:bg-white selection:text-blue-900 border border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md p-2 w-full"
           placeholder="Got something to do? Type it here!"
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
       </div>
 
-      <div>
-        <DatePicker
-          selected={deadline}
-          onChange={(date: Date | null) => setDeadline(date)}
-          showTimeSelect
-          dateFormat="Pp"
-          placeholderText="Select deadline"
-          className="font-semibold text-blue-800"
-          portalId="root"
-          withPortal
-        />
-        <Button
-          type="button"
-          variant="outline"
-          className="btn w-full"
-          onClick={addTodo}
-        >
-          Add Todo
-        </Button>
+      <div className="flex items-center gap-2 md:flex-col md:items-stretch">
+        <div>
+          <DatePicker
+            selected={deadline}
+            onChange={(date: Date | null) => setDeadline(date)}
+            showTimeSelect
+            dateFormat="Pp"
+            placeholderText="Select deadline"
+            className="font-semibold text-blue-800 w-full"
+            portalId="root"
+            withPortal
+          />
+        </div>
+        <div>
+          <Button
+            type="button"
+            variant="outline"
+            className="btn w-full"
+            onClick={addTodo}
+          >
+            Add Todo
+          </Button>
+        </div>
       </div>
     </div>
+
   )
 }
