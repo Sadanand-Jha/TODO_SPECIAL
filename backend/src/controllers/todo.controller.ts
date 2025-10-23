@@ -13,7 +13,8 @@ const addTodo = asyncHandler(async(req: Request, res: Response) => {
     const todo: ITodo = await Todo.create({
         todo: content,
         deadline,
-        owner: req.user?.fullname
+        owner: req.user?.fullname,
+        status: true
     })
 
     await todo.save()
@@ -23,7 +24,7 @@ const addTodo = asyncHandler(async(req: Request, res: Response) => {
 })
 
 const getAllTodo = asyncHandler(async (req: Request ,res: Response) => {
-    const todos = await Todo.find({owner: req.user?.fullname})
+    const todos = await Todo.find({owner: req.user?.fullname, status: true})
     // console.log(todos)
     // console.log("helloworld! this is from getalltodo")
     return res.status(200)
@@ -34,11 +35,13 @@ const deleteTodo = asyncHandler(async(req: Request, res: Response) => {
     // console.log("this is from todo controller ", req.body)
     const {deadline, todo} = req.body
     
-    const delete_todo = await Todo.findOneAndDelete({deadline, todo})
+    const delete_todo = await Todo.findOne({deadline, todo})
     if(!delete_todo){
         return res.status(400)
         .json(new ApiError(400, "todo not found!"))
     }
+    delete_todo.status = false;
+    await delete_todo.save()
     return res.status(200)
     .json(new ApiResponse(200,"", "Todo deleted"))
 })

@@ -5,6 +5,7 @@ import ApiError from "../utils/apiError"
 import ApiResponse from "../utils/apiResponse"
 import sendEmail, { emailOtpVerificationMailGen } from "../utils/mail"
 import jwt from "jsonwebtoken";
+// import { stringify } from "querystring"
 
 
 const generateAccessTokenAndRefreshToken = async (email: string): Promise<{ refreshToken: string, accessToken: string }> => {
@@ -43,7 +44,8 @@ const sendEmailForRegister = asyncHandler(async (req: Request, res: Response) =>
     await sendEmail({ email, subject: "Verification email", mailgenContent: emailOtpVerificationMailGen(email.split('@')[0], otp) })
   } catch (error) {
     // console.log("error from SENDING THE EMAIL")
-    throw new ApiError(400, "Email failed")
+    return res.status(400)
+    .json( new ApiError(400, "Email failed"))
   }
 
   return res.status(200)
@@ -88,19 +90,28 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
   const user: IUser | null = await User.findOne({ email })
 
   if (!user) {
-    return new ApiError(400, "User not found while registering")
+    return res.status(400).json( new ApiError(400, "User not found while registering"))
   }
+
+  const user2 = await User.findOne({email, isEmailVerified: true})
+  if(user2){
+    return res.status(400).json( new ApiError(400, "User already exists"))
+  }
+  
+  let count = Math.ceil(Math.random() * fullname.length)
+  if(count == 0) count = fullname.length
+
+  let fullnaam:string = fullname
+
+  console.log(`this is the count`,count)
+  let username: string = fullnaam.substring(0, count) + (Math.floor(Math.random() * 1000)).toString()
 
   user.password = password
   user.fullname = fullname
+  user.username = username
 
   await user.save()
 
-  // if (createdUser) {
-  //     return res
-  //         .status(400)
-  //         .json(new ApiError(400, "User already exists!"))
-  // }
 
   if (!user) {
     return res.status(400)
@@ -117,8 +128,8 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
 
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body
-  console.log("this is the email in controller ", email)
-  console.log("this is password", password)
+  // console.log("this is the email in controller ", email)
+  // console.log("this is password", password)
 
   const user = await User.findOne({ email })
   if (!user) {

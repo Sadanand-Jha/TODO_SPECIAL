@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import api from "../../../functions/api"
 import { useTodo } from "@/context/TodoContext"
-import { SourceTextModule } from "vm"
+// import { SourceTextModule } from "vm"
 
 export default function InputWithButton() {
   const [content, setContent] = useState("")
@@ -57,7 +57,7 @@ export default function InputWithButton() {
         <Input
           type="text"
           className="text-blue-500 placeholder-blue-500 selection:bg-white selection:text-blue-900 border border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md p-2 w-full"
-          placeholder="Got something to do? Type it here!"
+          placeholder="Add new Todo!"
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
